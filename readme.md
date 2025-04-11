@@ -12,6 +12,16 @@ clasp login
 
 - ローカルにソースコードがアップさせる
 
+```bash
+clasp clone <スクリプトID> --rootDir ./src
+```
+
+- ローカルと GAS 上の差分確認
+
+```bash
+clasp status
+```
+
 - github にリポジトリ作成
 
 - ローカルで編集したソースを反映
@@ -58,3 +68,8 @@ node_modules/**
 README.md
 .gitignore
 ```
+
+- github の Actions secrets and variables に**CLASPRC_JSON**の値をセットする
+
+Name: CLASPRC_JSON
+Secret: 値
