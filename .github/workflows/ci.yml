@@ -3,10 +3,10 @@ name: GAS CI/CD
 on:
   push:
     branches:
-      - main
+      - "**"
   pull_request:
     branches:
-      - main
+      - "**"
 
 jobs:
   test-and-deploy:
@@ -27,13 +27,11 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Set up clasp
+      - name: Install clasp
         run: npm install -g @google/clasp
 
-      - name: Create clasp credentials
-        run: |
-          touch ~/.clasprc.json
-          echo '${{ secrets.CLASPRC_JSON }}' > ~/.clasprc.json
+      - name: Restore clasp credentials
+        run: echo '${{ secrets.CLASPRC_JSON }}' > ~/.clasprc.json
 
       - name: Push to GAS
         run: clasp push --force
