@@ -66,7 +66,6 @@ node_modules/**
 
 # ドキュメントなど
 README.md
-.gitignore
 ```
 
 - github の Actions secrets and variables に**CLASPRC_JSON**の値をセットする
