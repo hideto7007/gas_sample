@@ -72,4 +72,4 @@ README.md
 - github の Actions secrets and variables に**CLASPRC_JSON**の値をセットする
 
 Name: CLASPRC_JSON
-Secret: 値
+Secret: JSON の値
