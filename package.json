@@ -1,0 +1,23 @@
+{
+  "name": "gas_sample",
+  "version": "1.0.0",
+  "description": "--",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hideto7007/gas_sample.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hideto7007/gas_sample/issues"
+  },
+  "homepage": "https://github.com/hideto7007/gas_sample#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

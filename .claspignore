@@ -1,0 +1,14 @@
+# テストコード除外
+test/**
+
+# ビルドツール設定など
+jest.config.js
+package.json
+package-lock.json
+
+# npm系
+node_modules/**
+
+# ドキュメントなど
+README.md
+.gitignore
