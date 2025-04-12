@@ -47,9 +47,6 @@ jobs:
             },
             "isLocalCreds": false
           }' > ~/.clasprc.json
-      - name: Deploy
-        run: |
-          clasp push
 
       - name: Push to GAS
         if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
