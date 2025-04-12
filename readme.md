@@ -173,3 +173,47 @@ User has not enabled the Apps Script API. Enable it by visiting https://script.g
 ```
 
 [こちらからアクセス](https://script.google.com/home/usersettings)
+
+### github actions で認証エラーが起きた際の対策
+
+一度、ライブラリとファイル削除
+
+```bash
+npm uninstall -g @google/clasp
+rm -rf ~/.clasprc.json ~/.clasp.json ~/.config/configstore/clasp.json
+```
+
+再度、インストール
+
+```bash
+npm install -g @google/clasp
+```
+
+ログインする
+
+```bash
+clasp login
+```
+
+clasprc の中身を確認 →json の中身を最新化(<>部分を更新)して、git の Secret に json のままセットする
+
+```bash
+ cat ~/.clasprc.json
+```
+
+```json
+{
+  "token": {
+    "access_token": "<token>",
+    "refresh_token": "1//0eUggOyQ8WffaCgYIARAAGA4SNwF-L9Ir3Pv9YHz3wRvZN5ZnhT-VQEGPxmSYmGBTzciP0n3Ez2vCVU-kf7TMjGNCxY9ddRVwK2g",
+    "scope": "https://www.googleapis.com/auth/script.projects https://www.googleapis.com/auth/script.deployments",
+    "token_type": "Bearer",
+    "expiry_date": 9999999999999
+  },
+  "oauth2ClientSettings": {
+    "clientId": "<clientId>",
+    "clientSecret": "<clientSecret>"
+  },
+  "isLocalCreds": false
+}
+```
