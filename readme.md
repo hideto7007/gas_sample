@@ -190,7 +190,7 @@ User has not enabled the Apps Script API. Enable it by visiting https://script.g
 
 [こちらからアクセス](https://script.google.com/home/usersettings)
 
-### github actions で認証エラーが起きた際の対策
+### ✅ github actions で認証エラーが起きた際の対策
 
 エラー情報
 
