@@ -38,7 +38,6 @@ jobs:
               "refresh_token": "${{ secrets.REFRESH_TOKEN }}",
               "scope": "https://www.googleapis.com/auth/script.projects https://www.googleapis.com/auth/script.deployments",
               "token_type": "Bearer",
-              "expiry_date": 9999999999999
             },
             "oauth2ClientSettings": {
               "clientId": "${{ secrets.CLIENTID }}",
