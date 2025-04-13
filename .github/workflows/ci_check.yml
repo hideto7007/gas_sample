@@ -25,7 +25,7 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm test
+        run: npm test -- --coverage
 
       - name: Install clasp
         run: npm install -g @google/clasp
