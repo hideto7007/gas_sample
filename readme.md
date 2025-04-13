@@ -77,28 +77,18 @@ clasp login --no-localhost
 - 認証後に http://localhost:8888/?code=... にリダイレクトされる
 - その URL をそのままターミナルに貼って完了！
 
-2. ~/.clasprc.json の内容を GitHub Secrets に登録
+### 🔐 GitHub Secrets と `.clasprc.json` の対応関係
 
-- GitHub → Settings → Secrets and variables → Actions
-- CLASPRC_JSON という名前で追加
-- 中身は以下のような形式：
+GitHub Actions で `.clasprc.json` を再構築する場合、それぞれのキーを以下のように登録してください。
 
-```json
-{
-  "token": {
-    "access_token": "ya29...",
-    "refresh_token": "1//...",
-    "scope": "https://www.googleapis.com/auth/script.projects https://www.googleapis.com/auth/script.deployments",
-    "token_type": "Bearer",
-    "expiry_date": 9999999999999
-  },
-  "oauth2ClientSettings": {
-    "clientId": "xxx.apps.googleusercontent.com",
-    "clientSecret": "xxx"
-  },
-  "isLocalCreds": false
-}
-```
+| GitHub Secrets に登録するキー名 | `.clasprc.json` 内の対応キー名 | 用途                                 |
+| ------------------------------- | ------------------------------ | ------------------------------------ |
+| `ACCESS_TOKEN`                  | `access_token`                 | 短期トークン（API アクセス用）       |
+| `REFRESH_TOKEN`                 | `refresh_token`                | 長期トークン（access_token 再発行）  |
+| `CLIENTID`                      | `client_id`                    | OAuth クライアント ID（Google 発行） |
+| `CLIENTSECRET`                  | `client_secret`                | クライアントの秘密鍵                 |
+
+※ Secrets の値は **文字列のみ**（クオートや波括弧なし）で登録してください。
 
 ## ✅ 7. GitHub Actions の設定
 
