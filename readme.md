@@ -102,7 +102,7 @@ clasp login --no-localhost
 
 ## ✅ 7. GitHub Actions の設定
 
-.github/workflows/ci.yml を作成：
+.github/workflows/ci_check.yml を作成：
 
 ```yml
 name: GAS CI/CD
@@ -110,7 +110,7 @@ name: GAS CI/CD
 on:
   push:
     branches:
-      - "**" # 全ブランチで実行
+      - "**"
   pull_request:
     branches:
       - "**"
@@ -132,15 +132,31 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm test
+        run: npm test -- --coverage
 
       - name: Install clasp
         run: npm install -g @google/clasp
 
-      - name: Restore clasp credentials
-        run: echo '${{ secrets.CLASPRC_JSON }}' > ~/.clasprc.json
+      - name: Restore clasp credentials from secrets
+        run: |
+          echo '{
+            "token": {
+              "access_token": "${{ secrets.ACCESS_TOKEN }}",
+              "refresh_token": "${{ secrets.REFRESH_TOKEN }}",
+              "scope": "https://www.googleapis.com/auth/script.projects https://www.googleapis.com/auth/script.deployments",
+              "token_type": "Bearer",
+              "expiry_date": 9999999999999
+            },
+            "oauth2ClientSettings": {
+              "clientId": "${{ secrets.CLIENTID }}",
+              "clientSecret": "${{ secrets.CLIENTSECRET }}",
+              "redirectUri": "http://localhost"
+            },
+            "isLocalCreds": false
+          }' > ~/.clasprc.json
 
       - name: Push to GAS
+        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
         run: clasp push --force
 ```
 
@@ -176,44 +192,30 @@ User has not enabled the Apps Script API. Enable it by visiting https://script.g
 
 ### github actions で認証エラーが起きた際の対策
 
-一度、ライブラリとファイル削除
+エラー情報
 
-```bash
-npm uninstall -g @google/clasp
-rm -rf ~/.clasprc.json ~/.clasp.json ~/.config/configstore/clasp.json
+```log
+Run clasp push --force
+
+- Pushing files…
+Push failed. Errors:
+Invalid Credentials
+Invalid Credentials
+Error: Process completed with exit code 1.
 ```
 
-再度、インストール
+内容としては、アクセストークンの有効期限切れ
+
+解決方法としては以下の手順で最新の access_token 取得し github 上の access_token を更新する
+
+1. clasp login
+2. cat ~/.clasprc.json の中に最新のログイン情報があるので、その中の`access_token`の値をコピー
+3. GitHub の Settings > Secrets > ACCESS_TOKEN を編集し先ほどコピーした値を貼り付け
+4. 再度、CI 実施
+
+補足
 
 ```bash
-npm install -g @google/clasp
-```
-
-ログインする
-
-```bash
-clasp login
-```
-
-clasprc の中身を確認 →json の中身を最新化(<>部分を更新)して、git の Secret に json のままセットする
-
-```bash
- cat ~/.clasprc.json
-```
-
-```json
-{
-  "token": {
-    "access_token": "<token>",
-    "refresh_token": "1//0eUggOyQ8WffaCgYIARAAGA4SNwF-L9Ir3Pv9YHz3wRvZN5ZnhT-VQEGPxmSYmGBTzciP0n3Ez2vCVU-kf7TMjGNCxY9ddRVwK2g",
-    "scope": "https://www.googleapis.com/auth/script.projects https://www.googleapis.com/auth/script.deployments",
-    "token_type": "Bearer",
-    "expiry_date": 9999999999999
-  },
-  "oauth2ClientSettings": {
-    "clientId": "<clientId>",
-    "clientSecret": "<clientSecret>"
-  },
-  "isLocalCreds": false
-}
+# 以下のコマンドを実行するとaccess_tokenだけ取得できる
+jq -r '.tokens.default.access_token' ~/.clasprc.json
 ```
